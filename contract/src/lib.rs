@@ -54,7 +54,7 @@ mod tests {
         testing_env!(VMContextBuilder::new().build());
 
         // Using a unit test to rapidly debug and iterate
-        let debug_solution = "near nomicon ref finance";
+        let debug_solution = "tether ethereum shib dogecoin solana bitcoin avax polkadot";
         let debug_hash_bytes = env::sha256(debug_solution.as_bytes());
         let debug_hash_string = hex::encode(debug_hash_bytes);
         println!("Let's debug: {:?}", debug_hash_string);

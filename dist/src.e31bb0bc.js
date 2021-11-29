@@ -29899,13 +29899,17 @@ var process = require("process");
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.StyleSheetContext = exports.StyleSheetConsumer = exports.ServerStyleSheet = void 0;
 exports.StyleSheetManager = ye;
-exports.ThemeProvider = Ge;
-exports.createGlobalStyle = $e;
-exports.css = Ae;
+exports.ThemeContext = exports.ThemeConsumer = void 0;
+exports.ThemeProvider = Fe;
+exports.__PRIVATE__ = void 0;
+exports.createGlobalStyle = We;
+exports.css = Ce;
+exports.default = void 0;
 exports.isStyledComponent = N;
-exports.keyframes = We;
-exports.withTheme = exports.version = exports.useTheme = exports.__PRIVATE__ = exports.ThemeContext = exports.ThemeConsumer = exports.StyleSheetContext = exports.StyleSheetConsumer = exports.ServerStyleSheet = exports.default = void 0;
+exports.keyframes = Ue;
+exports.withTheme = exports.version = exports.useTheme = void 0;
 
 var _reactIs = require("react-is");
 
@@ -29963,7 +29967,7 @@ function N(e) {
 }
 
 var A = "undefined" != typeof process && (undefined || undefined) || "data-styled",
-    C = "5.3.0",
+    C = "5.3.3",
     I = "undefined" != typeof window && "HTMLElement" in window,
     P = Boolean("boolean" == typeof SC_DISABLE_SPEEDY ? SC_DISABLE_SPEEDY : "undefined" != typeof process && void 0 !== undefined && "" !== undefined ? "false" !== undefined && undefined : "undefined" != typeof process && void 0 !== undefined && "" !== undefined ? "false" !== undefined && undefined : "production" !== "development"),
     O = {},
@@ -30018,10 +30022,10 @@ var T = function () {
 
       this.groupSizes = new Uint32Array(o), this.groupSizes.set(n), this.length = o;
 
-      for (var i = r; i < o; i++) this.groupSizes[i] = 0;
+      for (var s = r; s < o; s++) this.groupSizes[s] = 0;
     }
 
-    for (var s = this.indexOfGroup(e + 1), a = 0, c = t.length; a < c; a++) this.tag.insertRule(s, t[a]) && (this.groupSizes[e]++, s++);
+    for (var i = this.indexOfGroup(e + 1), a = 0, c = t.length; a < c; a++) this.tag.insertRule(i, t[a]) && (this.groupSizes[e]++, i++);
   }, t.clearGroup = function (e) {
     if (e < this.length) {
       var t = this.groupSizes[e],
@@ -30035,45 +30039,45 @@ var T = function () {
     var t = "";
     if (e >= this.length || 0 === this.groupSizes[e]) return t;
 
-    for (var n = this.groupSizes[e], r = this.indexOfGroup(e), o = r + n, i = r; i < o; i++) t += this.tag.getRule(i) + "/*!sc*/\n";
+    for (var n = this.groupSizes[e], r = this.indexOfGroup(e), o = r + n, s = r; s < o; s++) t += this.tag.getRule(s) + "/*!sc*/\n";
 
     return t;
   }, e;
 }(),
-    k = new Map(),
     x = new Map(),
+    k = new Map(),
     V = 1,
     B = function (e) {
-  if (k.has(e)) return k.get(e);
+  if (x.has(e)) return x.get(e);
 
-  for (; x.has(V);) V++;
+  for (; k.has(V);) V++;
 
   var t = V++;
-  return "production" !== "development" && ((0 | t) < 0 || t > 1 << 30) && j(16, "" + t), k.set(e, t), x.set(t, e), t;
+  return "production" !== "development" && ((0 | t) < 0 || t > 1 << 30) && j(16, "" + t), x.set(e, t), k.set(t, e), t;
 },
-    M = function (e) {
-  return x.get(e);
+    z = function (e) {
+  return k.get(e);
 },
-    z = function (e, t) {
-  k.set(e, t), x.set(t, e);
+    M = function (e, t) {
+  t >= V && (V = t + 1), x.set(e, t), k.set(t, e);
 },
-    L = "style[" + A + '][data-styled-version="5.3.0"]',
-    G = new RegExp("^" + A + '\\.g(\\d+)\\[id="([\\w\\d-]+)"\\].*?"([^"]*)'),
+    G = "style[" + A + '][data-styled-version="5.3.3"]',
+    L = new RegExp("^" + A + '\\.g(\\d+)\\[id="([\\w\\d-]+)"\\].*?"([^"]*)'),
     F = function (e, t, n) {
-  for (var r, o = n.split(","), i = 0, s = o.length; i < s; i++) (r = o[i]) && e.registerName(t, r);
+  for (var r, o = n.split(","), s = 0, i = o.length; s < i; s++) (r = o[s]) && e.registerName(t, r);
 },
     Y = function (e, t) {
-  for (var n = t.innerHTML.split("/*!sc*/\n"), r = [], o = 0, i = n.length; o < i; o++) {
-    var s = n[o].trim();
+  for (var n = (t.textContent || "").split("/*!sc*/\n"), r = [], o = 0, s = n.length; o < s; o++) {
+    var i = n[o].trim();
 
-    if (s) {
-      var a = s.match(G);
+    if (i) {
+      var a = i.match(L);
 
       if (a) {
         var c = 0 | parseInt(a[1], 10),
             u = a[2];
-        0 !== c && (z(u, c), F(e, u, a[3]), e.getTag().insertRules(c, r)), r.length = 0;
-      } else r.push(s);
+        0 !== c && (M(u, c), F(e, u, a[3]), e.getTag().insertRules(c, r)), r.length = 0;
+      } else r.push(i);
     }
   }
 },
@@ -30090,11 +30094,11 @@ var T = function () {
       if (r && 1 === r.nodeType && r.hasAttribute(A)) return r;
     }
   }(n),
-      i = void 0 !== o ? o.nextSibling : null;
+      s = void 0 !== o ? o.nextSibling : null;
 
-  r.setAttribute(A, "active"), r.setAttribute("data-styled-version", "5.3.0");
-  var s = q();
-  return s && r.setAttribute("nonce", s), n.insertBefore(r, i), r;
+  r.setAttribute(A, "active"), r.setAttribute("data-styled-version", "5.3.3");
+  var i = q();
+  return i && r.setAttribute("nonce", i), n.insertBefore(r, s), r;
 },
     $ = function () {
   function e(e) {
@@ -30167,8 +30171,8 @@ var T = function () {
 },
     Z = function () {
   function e(e, t, n) {
-    void 0 === e && (e = E), void 0 === t && (t = {}), this.options = v({}, X, {}, e), this.gs = t, this.names = new Map(n), !this.options.isServer && I && J && (J = !1, function (e) {
-      for (var t = document.querySelectorAll(L), n = 0, r = t.length; n < r; n++) {
+    void 0 === e && (e = E), void 0 === t && (t = {}), this.options = v({}, X, {}, e), this.gs = t, this.names = new Map(n), this.server = !!e.isServer, !this.server && I && J && (J = !1, function (e) {
+      for (var t = document.querySelectorAll(G), n = 0, r = t.length; n < r; n++) {
         var o = t[n];
         o && "active" !== o.getAttribute(A) && (Y(e, o), o.parentNode && o.parentNode.removeChild(o));
       }
@@ -30205,16 +30209,16 @@ var T = function () {
   }, t.toString = function () {
     return function (e) {
       for (var t = e.getTag(), n = t.length, r = "", o = 0; o < n; o++) {
-        var i = M(o);
+        var s = z(o);
 
-        if (void 0 !== i) {
-          var s = e.names.get(i),
+        if (void 0 !== s) {
+          var i = e.names.get(s),
               a = t.getGroup(o);
 
-          if (void 0 !== s && 0 !== a.length) {
-            var c = A + ".g" + o + '[id="' + i + '"]',
+          if (i && a && i.size) {
+            var c = A + ".g" + o + '[id="' + s + '"]',
                 u = "";
-            void 0 !== s && s.forEach(function (e) {
+            void 0 !== i && i.forEach(function (e) {
               e.length > 0 && (u += e + ",");
             }), r += "" + a + c + '{content:"' + u + '"}/*!sc*/\n';
           }
@@ -30257,8 +30261,8 @@ function re(e) {
   return !0;
 }
 
-var oe = ne("5.3.0"),
-    ie = function () {
+var oe = ne("5.3.3"),
+    se = function () {
   function e(e, t, n) {
     this.rules = e, this.staticRulesId = "", this.isStatic = "production" === "development" && (void 0 === n || n.isStatic) && re(e), this.componentId = t, this.baseHash = te(oe, t), this.baseStyle = n, Z.registerId(t);
   }
@@ -30268,15 +30272,15 @@ var oe = ne("5.3.0"),
         o = [];
     if (this.baseStyle && o.push(this.baseStyle.generateAndInjectStyles(e, t, n)), this.isStatic && !n.hash) {
       if (this.staticRulesId && t.hasNameForId(r, this.staticRulesId)) o.push(this.staticRulesId);else {
-        var i = Ne(this.rules, e, t, n).join(""),
-            s = ee(te(this.baseHash, i.length) >>> 0);
+        var s = Ne(this.rules, e, t, n).join(""),
+            i = ee(te(this.baseHash, s) >>> 0);
 
-        if (!t.hasNameForId(r, s)) {
-          var a = n(i, "." + s, void 0, r);
-          t.insertRules(r, s, a);
+        if (!t.hasNameForId(r, i)) {
+          var a = n(s, "." + i, void 0, r);
+          t.insertRules(r, i, a);
         }
 
-        o.push(s), this.staticRulesId = s;
+        o.push(i), this.staticRulesId = i;
       }
     } else {
       for (var c = this.rules.length, u = te(this.baseHash, n.hash), l = "", d = 0; d < c; d++) {
@@ -30302,7 +30306,7 @@ var oe = ne("5.3.0"),
     return o.join(" ");
   }, e;
 }(),
-    se = /^\s*\/\/.*$/gm,
+    ie = /^\s*\/\/.*$/gm,
     ae = [":", "[", ".", "#"];
 
 function ce(e) {
@@ -30310,10 +30314,10 @@ function ce(e) {
       n,
       r,
       o,
-      i = void 0 === e ? E : e,
-      s = i.options,
-      a = void 0 === s ? E : s,
-      c = i.plugins,
+      s = void 0 === e ? E : e,
+      i = s.options,
+      a = void 0 === i ? E : i,
+      c = s.plugins,
       u = void 0 === c ? w : c,
       l = new _stylis.default(a),
       d = [],
@@ -30324,7 +30328,7 @@ function ce(e) {
       } catch (e) {}
     }
 
-    return function (n, r, o, i, s, a, c, u, l, d) {
+    return function (n, r, o, s, i, a, c, u, l, d) {
       switch (n) {
         case 1:
           if (0 === l && 64 === r.charCodeAt(0)) return e(r + ";"), "";
@@ -30351,15 +30355,15 @@ function ce(e) {
   }(function (e) {
     d.push(e);
   }),
-      f = function (e, r, i) {
-    return 0 === r && -1 !== ae.indexOf(i[n.length]) || i.match(o) ? e : "." + t;
+      f = function (e, r, s) {
+    return 0 === r && -1 !== ae.indexOf(s[n.length]) || s.match(o) ? e : "." + t;
   };
 
-  function m(e, i, s, a) {
+  function m(e, s, i, a) {
     void 0 === a && (a = "&");
-    var c = e.replace(se, ""),
-        u = i && s ? s + " " + i + " { " + c + " }" : c;
-    return t = a, n = i, r = new RegExp("\\" + n + "\\b", "g"), o = new RegExp("(\\" + n + "\\b){2,}"), l(s || !i ? "" : i, u);
+    var c = e.replace(ie, ""),
+        u = s && i ? i + " " + s + " { " + c + " }" : c;
+    return t = a, n = s, r = new RegExp("\\" + n + "\\b", "g"), o = new RegExp("(\\" + n + "\\b){2,}"), l(i || !s ? "" : s, u);
   }
 
   return l.use([].concat(u, [function (e, t, o) {
@@ -30394,7 +30398,7 @@ function me() {
 function ye(e) {
   var t = (0, _react.useState)(e.stylisPlugins),
       n = t[0],
-      i = t[1],
+      s = t[1],
       c = fe(),
       u = (0, _react.useMemo)(function () {
     var t = c;
@@ -30413,7 +30417,7 @@ function ye(e) {
     });
   }, [e.disableVendorPrefixes, n]);
   return (0, _react.useEffect)(function () {
-    (0, _shallowequal.default)(n, e.stylisPlugins) || i(e.stylisPlugins);
+    (0, _shallowequal.default)(n, e.stylisPlugins) || s(e.stylisPlugins);
   }, [e.stylisPlugins]), _react.default.createElement(ue.Provider, {
     value: u
   }, _react.default.createElement(de.Provider, {
@@ -30454,9 +30458,9 @@ var _e = function (e) {
 
 function Ne(e, n, r, o) {
   if (Array.isArray(e)) {
-    for (var i, s = [], a = 0, c = e.length; a < c; a += 1) "" !== (i = Ne(e[a], n, r, o)) && (Array.isArray(i) ? s.push.apply(s, i) : s.push(i));
+    for (var s, i = [], a = 0, c = e.length; a < c; a += 1) "" !== (s = Ne(e[a], n, r, o)) && (Array.isArray(s) ? i.push.apply(i, s) : i.push(s));
 
-    return s;
+    return i;
   }
 
   if (_e(e)) return "";
@@ -30472,44 +30476,58 @@ function Ne(e, n, r, o) {
   return e instanceof ve ? r ? (e.inject(r, o), e.getName(o)) : e : S(e) ? function e(t, n) {
     var r,
         o,
-        i = [];
+        s = [];
 
-    for (var s in t) t.hasOwnProperty(s) && !_e(t[s]) && (S(t[s]) ? i.push.apply(i, e(t[s], s)) : b(t[s]) ? i.push(be(s) + ":", t[s], ";") : i.push(be(s) + ": " + (r = s, null == (o = t[s]) || "boolean" == typeof o || "" === o ? "" : "number" != typeof o || 0 === o || r in _unitless.default ? String(o).trim() : o + "px") + ";"));
+    for (var i in t) t.hasOwnProperty(i) && !_e(t[i]) && (Array.isArray(t[i]) && t[i].isCss || b(t[i]) ? s.push(be(i) + ":", t[i], ";") : S(t[i]) ? s.push.apply(s, e(t[i], i)) : s.push(be(i) + ": " + (r = i, null == (o = t[i]) || "boolean" == typeof o || "" === o ? "" : "number" != typeof o || 0 === o || r in _unitless.default ? String(o).trim() : o + "px") + ";"));
 
-    return n ? [n + " {"].concat(i, ["}"]) : i;
+    return n ? [n + " {"].concat(s, ["}"]) : s;
   }(e) : e.toString();
 }
 
-function Ae(e) {
+var Ae = function (e) {
+  return Array.isArray(e) && (e.isCss = !0), e;
+};
+
+function Ce(e) {
   for (var t = arguments.length, n = new Array(t > 1 ? t - 1 : 0), r = 1; r < t; r++) n[r - 1] = arguments[r];
 
-  return b(e) || S(e) ? Ne(g(w, [e].concat(n))) : 0 === n.length && 1 === e.length && "string" == typeof e[0] ? e : Ne(g(e, n));
+  return b(e) || S(e) ? Ae(Ne(g(w, [e].concat(n)))) : 0 === n.length && 1 === e.length && "string" == typeof e[0] ? e : Ae(Ne(g(e, n)));
 }
 
-var Ce = /invalid hook call/i,
-    Ie = new Set(),
-    Pe = function (e, t) {
+var Ie = /invalid hook call/i,
+    Pe = new Set(),
+    Oe = function (e, t) {
   if ("production" !== "development") {
-    var n = "The component " + e + (t ? ' with the id of "' + t + '"' : "") + " has been created dynamically.\nYou may see this warning because you've called styled inside another component.\nTo resolve this only create new StyledComponents outside of any render method and function component.";
+    var n = "The component " + e + (t ? ' with the id of "' + t + '"' : "") + " has been created dynamically.\nYou may see this warning because you've called styled inside another component.\nTo resolve this only create new StyledComponents outside of any render method and function component.",
+        r = console.error;
 
     try {
-      (0, _react.useRef)(), Ie.has(n) || (console.warn(n), Ie.add(n));
+      var o = !0;
+      console.error = function (e) {
+        if (Ie.test(e)) o = !1, Pe.delete(n);else {
+          for (var t = arguments.length, s = new Array(t > 1 ? t - 1 : 0), i = 1; i < t; i++) s[i - 1] = arguments[i];
+
+          r.apply(void 0, [e].concat(s));
+        }
+      }, (0, _react.useRef)(), o && !Pe.has(n) && (console.warn(n), Pe.add(n));
     } catch (e) {
-      Ce.test(e.message) && Ie.delete(n);
+      Ie.test(e.message) && Pe.delete(n);
+    } finally {
+      console.error = r;
     }
   }
 },
-    Oe = function (e, t, n) {
+    Re = function (e, t, n) {
   return void 0 === n && (n = E), e.theme !== n.theme && e.theme || t || n.theme;
 },
-    Re = /[!"#$%&'()*+,./:;<=>?@[\\\]^`{|}~-]+/g,
-    De = /(^-|-$)/g;
+    De = /[!"#$%&'()*+,./:;<=>?@[\\\]^`{|}~-]+/g,
+    je = /(^-|-$)/g;
 
-function je(e) {
-  return e.replace(Re, "-").replace(De, "");
+function Te(e) {
+  return e.replace(De, "-").replace(je, "");
 }
 
-var Te = function (e) {
+var xe = function (e) {
   return ee(ne(e) >>> 0);
 };
 
@@ -30517,37 +30535,37 @@ function ke(e) {
   return "string" == typeof e && ("production" === "development" || e.charAt(0) === e.charAt(0).toLowerCase());
 }
 
-var xe = function (e) {
+var Ve = function (e) {
   return "function" == typeof e || "object" == typeof e && null !== e && !Array.isArray(e);
 },
-    Ve = function (e) {
+    Be = function (e) {
   return "__proto__" !== e && "constructor" !== e && "prototype" !== e;
 };
 
-function Be(e, t, n) {
+function ze(e, t, n) {
   var r = e[n];
-  xe(t) && xe(r) ? Me(r, t) : e[n] = t;
+  Ve(t) && Ve(r) ? Me(r, t) : e[n] = t;
 }
 
 function Me(e) {
   for (var t = arguments.length, n = new Array(t > 1 ? t - 1 : 0), r = 1; r < t; r++) n[r - 1] = arguments[r];
 
-  for (var o = 0, i = n; o < i.length; o++) {
-    var s = i[o];
-    if (xe(s)) for (var a in s) Ve(a) && Be(e, s[a], a);
+  for (var o = 0, s = n; o < s.length; o++) {
+    var i = s[o];
+    if (Ve(i)) for (var a in i) Be(a) && ze(e, i[a], a);
   }
 
   return e;
 }
 
-var ze = _react.default.createContext(),
-    Le = ze.Consumer;
+var Ge = _react.default.createContext(),
+    Le = Ge.Consumer;
 
 exports.ThemeConsumer = Le;
-exports.ThemeContext = ze;
+exports.ThemeContext = Ge;
 
-function Ge(e) {
-  var t = (0, _react.useContext)(ze),
+function Fe(e) {
+  var t = (0, _react.useContext)(Ge),
       n = (0, _react.useMemo)(function () {
     return function (e, t) {
       if (!e) return j(14);
@@ -30560,30 +30578,30 @@ function Ge(e) {
       return Array.isArray(e) || "object" != typeof e ? j(8) : t ? v({}, t, {}, e) : e;
     }(e.theme, t);
   }, [e.theme, t]);
-  return e.children ? _react.default.createElement(ze.Provider, {
+  return e.children ? _react.default.createElement(Ge.Provider, {
     value: n
   }, e.children) : null;
 }
 
-var Fe = {};
+var Ye = {};
 
-function Ye(e, t, n) {
+function qe(e, t, n) {
   var o = N(e),
-      s = !ke(e),
+      i = !ke(e),
       a = t.attrs,
       c = void 0 === a ? w : a,
       d = t.componentId,
       h = void 0 === d ? function (e, t) {
-    var n = "string" != typeof e ? "sc" : je(e);
-    Fe[n] = (Fe[n] || 0) + 1;
-    var r = n + "-" + Te("5.3.0" + n + Fe[n]);
+    var n = "string" != typeof e ? "sc" : Te(e);
+    Ye[n] = (Ye[n] || 0) + 1;
+    var r = n + "-" + xe("5.3.3" + n + Ye[n]);
     return t ? t + "-" + r : r;
   }(t.displayName, t.parentComponentId) : d,
       p = t.displayName,
       f = void 0 === p ? function (e) {
     return ke(e) ? "styled." + e : "Styled(" + _(e) + ")";
   }(e) : p,
-      g = t.displayName && t.componentId ? je(t.displayName) + "-" + t.componentId : t.componentId || h,
+      g = t.displayName && t.componentId ? Te(t.displayName) + "-" + t.componentId : t.componentId || h,
       S = o && e.attrs ? Array.prototype.concat(e.attrs, c).filter(Boolean) : c,
       A = t.shouldForwardProp;
   o && e.shouldForwardProp && (A = t.shouldForwardProp ? function (n, r, o) {
@@ -30591,12 +30609,12 @@ function Ye(e, t, n) {
   } : e.shouldForwardProp);
 
   var C,
-      I = new ie(n, g, o ? e.componentStyle : void 0),
+      I = new se(n, g, o ? e.componentStyle : void 0),
       P = I.isStatic && 0 === c.length,
       O = function (e, t) {
     return function (e, t, n, r) {
       var o = e.attrs,
-          s = e.componentStyle,
+          i = e.componentStyle,
           a = e.defaultProps,
           c = e.foldedComponentIds,
           d = e.shouldForwardProp,
@@ -30613,20 +30631,20 @@ function Ye(e, t, n) {
         return n.forEach(function (e) {
           var t,
               n,
-              i,
-              s = e;
+              s,
+              i = e;
 
-          for (t in b(s) && (s = s(r)), s) r[t] = o[t] = "className" === t ? (n = o[t], i = s[t], n && i ? n + " " + i : n || i) : s[t];
+          for (t in b(i) && (i = i(r)), i) r[t] = o[t] = "className" === t ? (n = o[t], s = i[t], n && s ? n + " " + s : n || s) : i[t];
         }), [r, o];
-      }(Oe(t, (0, _react.useContext)(ze), a) || E, t, o),
+      }(Re(t, (0, _react.useContext)(Ge), a) || E, t, o),
           y = f[0],
           g = f[1],
           S = function (e, t, n, r) {
         var o = fe(),
-            i = me(),
-            s = t ? e.generateAndInjectStyles(E, o, i) : e.generateAndInjectStyles(n, o, i);
-        return "production" !== "development" && (0, _react.useDebugValue)(s), "production" !== "development" && !t && r && r(s), s;
-      }(s, r, y, "production" !== "development" ? e.warnTooManyClasses : void 0),
+            s = me(),
+            i = t ? e.generateAndInjectStyles(E, o, s) : e.generateAndInjectStyles(n, o, s);
+        return "production" !== "development" && (0, _react.useDebugValue)(i), "production" !== "development" && !t && r && r(i), i;
+      }(i, r, y, "production" !== "development" ? e.warnTooManyClasses : void 0),
           w = n,
           _ = g.$as || t.$as || g.as || t.as || p,
           N = ke(_),
@@ -30646,17 +30664,17 @@ function Ye(e, t, n) {
       var n,
           r,
           o = {},
-          i = Object.keys(e);
+          s = Object.keys(e);
 
-      for (r = 0; r < i.length; r++) n = i[r], t.indexOf(n) >= 0 || (o[n] = e[n]);
+      for (r = 0; r < s.length; r++) n = s[r], t.indexOf(n) >= 0 || (o[n] = e[n]);
 
       return o;
     }(t, ["componentId"]),
-        i = r && r + "-" + (ke(e) ? e : je(_(e)));
+        s = r && r + "-" + (ke(e) ? e : Te(_(e)));
 
-    return Ye(e, v({}, o, {
+    return qe(e, v({}, o, {
       attrs: S,
-      componentId: i
+      componentId: s
     }), n);
   }, Object.defineProperty(C, "defaultProps", {
     get: function () {
@@ -30665,18 +30683,18 @@ function Ye(e, t, n) {
     set: function (t) {
       this._foldedDefaultProps = o ? Me({}, e.defaultProps, t) : t;
     }
-  }), "production" !== "development" && (Pe(f, g), C.warnTooManyClasses = function (e, t) {
+  }), "production" !== "development" && (Oe(f, g), C.warnTooManyClasses = function (e, t) {
     var n = {},
         r = !1;
     return function (o) {
       if (!r && (n[o] = !0, Object.keys(n).length >= 200)) {
-        var i = t ? ' with the id of "' + t + '"' : "";
-        console.warn("Over 200 classes were generated for component " + e + i + ".\nConsider using the attrs method, together with a style object for frequently changed styles.\nExample:\n  const Component = styled.div.attrs(props => ({\n    style: {\n      background: props.background,\n    },\n  }))`width: 100%;`\n\n  <Component />"), r = !0, n = {};
+        var s = t ? ' with the id of "' + t + '"' : "";
+        console.warn("Over 200 classes were generated for component " + e + s + ".\nConsider using the attrs method, together with a style object for frequently changed styles.\nExample:\n  const Component = styled.div.attrs(props => ({\n    style: {\n      background: props.background,\n    },\n  }))`width: 100%;`\n\n  <Component />"), r = !0, n = {};
       }
     };
   }(f, g)), C.toString = function () {
     return "." + C.styledComponentId;
-  }, s && (0, _hoistNonReactStatics.default)(C, e, {
+  }, i && (0, _hoistNonReactStatics.default)(C, e, {
     attrs: !0,
     componentStyle: !0,
     displayName: !0,
@@ -30688,29 +30706,29 @@ function Ye(e, t, n) {
   }), C;
 }
 
-var qe = function (e) {
+var He = function (e) {
   return function e(t, r, o) {
     if (void 0 === o && (o = E), !(0, _reactIs.isValidElementType)(r)) return j(1, String(r));
 
-    var i = function () {
-      return t(r, o, Ae.apply(void 0, arguments));
+    var s = function () {
+      return t(r, o, Ce.apply(void 0, arguments));
     };
 
-    return i.withConfig = function (n) {
+    return s.withConfig = function (n) {
       return e(t, r, v({}, o, {}, n));
-    }, i.attrs = function (n) {
+    }, s.attrs = function (n) {
       return e(t, r, v({}, o, {
         attrs: Array.prototype.concat(o.attrs, n).filter(Boolean)
       }));
-    }, i;
-  }(Ye, e);
+    }, s;
+  }(qe, e);
 };
 
 ["a", "abbr", "address", "area", "article", "aside", "audio", "b", "base", "bdi", "bdo", "big", "blockquote", "body", "br", "button", "canvas", "caption", "cite", "code", "col", "colgroup", "data", "datalist", "dd", "del", "details", "dfn", "dialog", "div", "dl", "dt", "em", "embed", "fieldset", "figcaption", "figure", "footer", "form", "h1", "h2", "h3", "h4", "h5", "h6", "head", "header", "hgroup", "hr", "html", "i", "iframe", "img", "input", "ins", "kbd", "keygen", "label", "legend", "li", "link", "main", "map", "mark", "marquee", "menu", "menuitem", "meta", "meter", "nav", "noscript", "object", "ol", "optgroup", "option", "output", "p", "param", "picture", "pre", "progress", "q", "rp", "rt", "ruby", "s", "samp", "script", "section", "select", "small", "source", "span", "strong", "style", "sub", "summary", "sup", "table", "tbody", "td", "textarea", "tfoot", "th", "thead", "time", "title", "tr", "track", "u", "ul", "var", "video", "wbr", "circle", "clipPath", "defs", "ellipse", "foreignObject", "g", "image", "line", "linearGradient", "marker", "mask", "path", "pattern", "polygon", "polyline", "radialGradient", "rect", "stop", "svg", "text", "textPath", "tspan"].forEach(function (e) {
-  qe[e] = qe(e);
+  He[e] = He(e);
 });
 
-var He = function () {
+var $e = function () {
   function e(e, t) {
     this.rules = e, this.componentId = t, this.isStatic = re(e), Z.registerId(this.componentId + 1);
   }
@@ -30718,8 +30736,8 @@ var He = function () {
   var t = e.prototype;
   return t.createStyles = function (e, t, n, r) {
     var o = r(Ne(this.rules, t, n, r).join(""), ""),
-        i = this.componentId + e;
-    n.insertRules(i, i, o);
+        s = this.componentId + e;
+    n.insertRules(s, s, o);
   }, t.removeStyles = function (e, t) {
     t.clearRules(this.componentId + e);
   }, t.renderStyles = function (e, t, n, r) {
@@ -30727,22 +30745,22 @@ var He = function () {
   }, e;
 }();
 
-function $e(e) {
+function We(e) {
   for (var t = arguments.length, n = new Array(t > 1 ? t - 1 : 0), o = 1; o < t; o++) n[o - 1] = arguments[o];
 
-  var s = Ae.apply(void 0, [e].concat(n)),
-      a = "sc-global-" + Te(JSON.stringify(s)),
-      u = new He(s, a);
+  var i = Ce.apply(void 0, [e].concat(n)),
+      a = "sc-global-" + xe(JSON.stringify(i)),
+      u = new $e(i, a);
 
   function l(e) {
     var t = fe(),
         n = me(),
-        o = (0, _react.useContext)(ze),
+        o = (0, _react.useContext)(Ge),
         l = (0, _react.useRef)(t.allocateGSInstance(a)).current;
-    return "production" !== "development" && _react.default.Children.count(e.children) && console.warn("The global style component " + a + " was given child JSX. createGlobalStyle does not render children."), "production" !== "development" && s.some(function (e) {
+    return "production" !== "development" && _react.default.Children.count(e.children) && console.warn("The global style component " + a + " was given child JSX. createGlobalStyle does not render children."), "production" !== "development" && i.some(function (e) {
       return "string" == typeof e && -1 !== e.indexOf("@import");
-    }) && console.warn("Please do not use @import CSS syntax in createGlobalStyle at this time, as the CSSOM APIs we use in production do not handle it well. Instead, we recommend using a library such as react-helmet to inject a typical <link> meta tag to the stylesheet, or simply embedding it manually in your index.html <head> section for a simpler app."), (0, _react.useLayoutEffect)(function () {
-      return h(l, e, t, o, n), function () {
+    }) && console.warn("Please do not use @import CSS syntax in createGlobalStyle at this time, as the CSSOM APIs we use in production do not handle it well. Instead, we recommend using a library such as react-helmet to inject a typical <link> meta tag to the stylesheet, or simply embedding it manually in your index.html <head> section for a simpler app."), t.server && h(l, e, t, o, n), (0, _react.useLayoutEffect)(function () {
+      if (!t.server) return h(l, e, t, o, n), function () {
         return u.removeStyles(l, t);
       };
     }, [l, e, t, o, n]), null;
@@ -30750,39 +30768,40 @@ function $e(e) {
 
   function h(e, t, n, r, o) {
     if (u.isStatic) u.renderStyles(e, O, n, o);else {
-      var i = v({}, t, {
-        theme: Oe(t, r, l.defaultProps)
+      var s = v({}, t, {
+        theme: Re(t, r, l.defaultProps)
       });
-      u.renderStyles(e, i, n, o);
+      u.renderStyles(e, s, n, o);
     }
   }
 
-  return "production" !== "development" && Pe(a), _react.default.memo(l);
+  return "production" !== "development" && Oe(a), _react.default.memo(l);
 }
 
-function We(e) {
+function Ue(e) {
   "production" !== "development" && "undefined" != typeof navigator && "ReactNative" === navigator.product && console.warn("`keyframes` cannot be used on ReactNative, only on the web. To do animation in ReactNative please use Animated.");
 
   for (var t = arguments.length, n = new Array(t > 1 ? t - 1 : 0), r = 1; r < t; r++) n[r - 1] = arguments[r];
 
-  var o = Ae.apply(void 0, [e].concat(n)).join(""),
-      i = Te(o);
-  return new ve(i, o);
+  var o = Ce.apply(void 0, [e].concat(n)).join(""),
+      s = xe(o);
+  return new ve(s, o);
 }
 
-var Ue = function () {
+var Je = function () {
   function e() {
     var e = this;
     this._emitSheetCSS = function () {
-      var t = e.instance.toString(),
-          n = q();
-      return "<style " + [n && 'nonce="' + n + '"', A + '="true"', 'data-styled-version="5.3.0"'].filter(Boolean).join(" ") + ">" + t + "</style>";
+      var t = e.instance.toString();
+      if (!t) return "";
+      var n = q();
+      return "<style " + [n && 'nonce="' + n + '"', A + '="true"', 'data-styled-version="5.3.3"'].filter(Boolean).join(" ") + ">" + t + "</style>";
     }, this.getStyleTags = function () {
       return e.sealed ? j(2) : e._emitSheetCSS();
     }, this.getStyleElement = function () {
       var t;
       if (e.sealed) return j(2);
-      var n = ((t = {})[A] = "", t["data-styled-version"] = "5.3.0", t.dangerouslySetInnerHTML = {
+      var n = ((t = {})[A] = "", t["data-styled-version"] = "5.3.3", t.dangerouslySetInnerHTML = {
         __html: e.instance.toString()
       }, t),
           o = q();
@@ -30805,11 +30824,11 @@ var Ue = function () {
     return j(3);
   }, e;
 }(),
-    Je = function (e) {
+    Xe = function (e) {
   var t = _react.default.forwardRef(function (t, n) {
-    var o = (0, _react.useContext)(ze),
-        s = e.defaultProps,
-        a = Oe(t, o, s);
+    var o = (0, _react.useContext)(Ge),
+        i = e.defaultProps,
+        a = Re(t, o, i);
     return "production" !== "development" && void 0 === a && console.warn('[withTheme] You are not using a ThemeProvider nor passing a theme prop or a theme in defaultProps in component class "' + _(e) + '"'), _react.default.createElement(e, v({}, t, {
       theme: a,
       ref: n
@@ -30818,20 +30837,20 @@ var Ue = function () {
 
   return (0, _hoistNonReactStatics.default)(t, e), t.displayName = "WithTheme(" + _(e) + ")", t;
 },
-    Xe = function () {
-  return (0, _react.useContext)(ze);
+    Ze = function () {
+  return (0, _react.useContext)(Ge);
 },
-    Ze = {
+    Ke = {
   StyleSheet: Z,
   masterSheet: he
 };
 
-exports.__PRIVATE__ = Ze;
-exports.useTheme = Xe;
-exports.withTheme = Je;
-exports.ServerStyleSheet = Ue;
-"production" !== "development" && "undefined" != typeof navigator && "ReactNative" === navigator.product && console.warn("It looks like you've imported 'styled-components' on React Native.\nPerhaps you're looking to import 'styled-components/native'?\nRead more about this at https://www.styled-components.com/docs/basics#react-native"), "production" !== "development" && "test" !== "development" && (window["__styled-components-init__"] = window["__styled-components-init__"] || 0, 1 === window["__styled-components-init__"] && console.warn("It looks like there are several instances of 'styled-components' initialized in this application. This may cause dynamic styles to not render properly, errors during the rehydration process, a missing theme prop, and makes your application bigger without good reason.\n\nSee https://s-c.sh/2BAXzed for more info."), window["__styled-components-init__"] += 1);
-var _default = qe;
+exports.__PRIVATE__ = Ke;
+exports.useTheme = Ze;
+exports.withTheme = Xe;
+exports.ServerStyleSheet = Je;
+"production" !== "development" && "undefined" != typeof navigator && "ReactNative" === navigator.product && console.warn("It looks like you've imported 'styled-components' on React Native.\nPerhaps you're looking to import 'styled-components/native'?\nRead more about this at https://www.styled-components.com/docs/basics#react-native"), "production" !== "development" && "test" !== "development" && "undefined" != typeof window && (window["__styled-components-init__"] = window["__styled-components-init__"] || 0, 1 === window["__styled-components-init__"] && console.warn("It looks like there are several instances of 'styled-components' initialized in this application. This may cause dynamic styles to not render properly, errors during the rehydration process, a missing theme prop, and makes your application bigger without good reason.\n\nSee https://s-c.sh/2BAXzed for more info."), window["__styled-components-init__"] += 1);
+var _default = He;
 exports.default = _default;
 },{"react-is":"../node_modules/react-is/index.js","react":"../node_modules/react/index.js","shallowequal":"../node_modules/shallowequal/index.js","@emotion/stylis":"../node_modules/@emotion/stylis/dist/stylis.browser.esm.js","@emotion/unitless":"../node_modules/@emotion/unitless/dist/unitless.browser.esm.js","@emotion/is-prop-valid":"../node_modules/@emotion/is-prop-valid/dist/is-prop-valid.browser.esm.js","hoist-non-react-statics":"../node_modules/hoist-non-react-statics/dist/hoist-non-react-statics.cjs.js","process":"../node_modules/process/browser.js"}],"../node_modules/@babel/runtime/helpers/typeof.js":[function(require,module,exports) {
 function _typeof(obj) {
@@ -32113,17 +32132,22 @@ DirectionClues.defaultProps = {};
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.applyPatches = exports.Immer = void 0;
 exports.castDraft = K;
 exports.castImmutable = $;
+exports.createDraft = void 0;
 exports.current = D;
+exports.default = void 0;
 exports.enableAllPlugins = J;
 exports.enableES5 = T;
 exports.enableMapSet = C;
 exports.enablePatches = F;
+exports.immerable = exports.finishDraft = void 0;
 exports.isDraft = t;
 exports.isDraftable = r;
+exports.nothing = void 0;
 exports.original = e;
-exports.setUseProxies = exports.setAutoFreeze = exports.produceWithPatches = exports.produce = exports.nothing = exports.immerable = exports.finishDraft = exports.createDraft = exports.applyPatches = exports.Immer = exports.default = void 0;
+exports.setUseProxies = exports.setAutoFreeze = exports.produceWithPatches = exports.produce = void 0;
 
 function n(n) {
   for (var t = arguments.length, r = Array(t > 1 ? t - 1 : 0), e = 1; e < t; e++) r[e - 1] = arguments[e];
@@ -42507,8 +42531,6 @@ function base (ALPHABET) {
     if (typeof source !== 'string') { throw new TypeError('Expected String') }
     if (source.length === 0) { return _Buffer.alloc(0) }
     var psz = 0
-        // Skip leading spaces.
-    if (source[psz] === ' ') { return }
         // Skip and count leading '1's.
     var zeroes = 0
     var length = 0
@@ -42535,8 +42557,6 @@ function base (ALPHABET) {
       length = i
       psz++
     }
-        // Skip trailing spaces.
-    if (source[psz] === ' ') { return }
         // Skip leading zeroes in b256.
     var it4 = size - length
     while (it4 !== size && b256[it4] === 0) {
@@ -44528,11 +44548,12 @@ if (typeof Object.create === 'function') {
  * Copyright(c) 2016 Douglas Christopher Wilson
  * MIT Licensed
  */
-
+'use strict';
 /**
  * Module exports.
  * @public
  */
+
 module.exports = toIdentifier;
 /**
  * Trasform the given string into a JavaScript identifier
@@ -50012,14 +50033,14 @@ var cache = function (fn) {
     if (!(fn instanceof Function)) {
         called = true;
         store = fn;
-        delete(fn);
+        fn = null;
     }
 
     return function () {
         if (!called) {
             called = true;
             store = fn.apply(this, arguments);
-            delete(fn);
+            fn = null;
         }
         return store;
     };
@@ -50427,6 +50448,12 @@ require("error-polyfill");
 },{"./key_stores/browser-index":"../node_modules/near-api-js/lib/key_stores/browser-index.js","./common-index":"../node_modules/near-api-js/lib/common-index.js","./browser-connect":"../node_modules/near-api-js/lib/browser-connect.js","error-polyfill":"../node_modules/error-polyfill/index.js"}],"utils.js":[function(require,module,exports) {
 "use strict";
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.parseSolutionSeedPhrase = parseSolutionSeedPhrase;
+exports.viewMethodOnContract = viewMethodOnContract;
+
 var nearAPI = _interopRequireWildcard(require("near-api-js"));
 
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
@@ -50503,13 +50530,563 @@ function parseSolutionSeedPhrase(data, gridData) {
     },
   };
 */
+},{"near-api-js":"../node_modules/near-api-js/lib/browser-index.js"}],"../node_modules/canvas-confetti/dist/confetti.module.mjs":[function(require,module,exports) {
+var global = arguments[3];
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = exports.create = void 0;
+// canvas-confetti v1.4.0 built on 2021-03-10T12:32:33.488Z
+var _module = {}; // source content
+
+(function main(global, module, isWorker, workerSize) {
+  var canUseWorker = !!(global.Worker && global.Blob && global.Promise && global.OffscreenCanvas && global.OffscreenCanvasRenderingContext2D && global.HTMLCanvasElement && global.HTMLCanvasElement.prototype.transferControlToOffscreen && global.URL && global.URL.createObjectURL);
+
+  function noop() {} // create a promise if it exists, otherwise, just
+  // call the function directly
 
 
-module.exports = {
-  viewMethodOnContract,
-  parseSolutionSeedPhrase
-};
-},{"near-api-js":"../node_modules/near-api-js/lib/browser-index.js"}],"App.js":[function(require,module,exports) {
+  function promise(func) {
+    var ModulePromise = module.exports.Promise;
+    var Prom = ModulePromise !== void 0 ? ModulePromise : global.Promise;
+
+    if (typeof Prom === 'function') {
+      return new Prom(func);
+    }
+
+    func(noop, noop);
+    return null;
+  }
+
+  var raf = function () {
+    var TIME = Math.floor(1000 / 60);
+    var frame, cancel;
+    var frames = {};
+    var lastFrameTime = 0;
+
+    if (typeof requestAnimationFrame === 'function' && typeof cancelAnimationFrame === 'function') {
+      frame = function (cb) {
+        var id = Math.random();
+        frames[id] = requestAnimationFrame(function onFrame(time) {
+          if (lastFrameTime === time || lastFrameTime + TIME - 1 < time) {
+            lastFrameTime = time;
+            delete frames[id];
+            cb();
+          } else {
+            frames[id] = requestAnimationFrame(onFrame);
+          }
+        });
+        return id;
+      };
+
+      cancel = function (id) {
+        if (frames[id]) {
+          cancelAnimationFrame(frames[id]);
+        }
+      };
+    } else {
+      frame = function (cb) {
+        return setTimeout(cb, TIME);
+      };
+
+      cancel = function (timer) {
+        return clearTimeout(timer);
+      };
+    }
+
+    return {
+      frame: frame,
+      cancel: cancel
+    };
+  }();
+
+  var getWorker = function () {
+    var worker;
+    var prom;
+    var resolves = {};
+
+    function decorate(worker) {
+      function execute(options, callback) {
+        worker.postMessage({
+          options: options || {},
+          callback: callback
+        });
+      }
+
+      worker.init = function initWorker(canvas) {
+        var offscreen = canvas.transferControlToOffscreen();
+        worker.postMessage({
+          canvas: offscreen
+        }, [offscreen]);
+      };
+
+      worker.fire = function fireWorker(options, size, done) {
+        if (prom) {
+          execute(options, null);
+          return prom;
+        }
+
+        var id = Math.random().toString(36).slice(2);
+        prom = promise(function (resolve) {
+          function workerDone(msg) {
+            if (msg.data.callback !== id) {
+              return;
+            }
+
+            delete resolves[id];
+            worker.removeEventListener('message', workerDone);
+            prom = null;
+            done();
+            resolve();
+          }
+
+          worker.addEventListener('message', workerDone);
+          execute(options, id);
+          resolves[id] = workerDone.bind(null, {
+            data: {
+              callback: id
+            }
+          });
+        });
+        return prom;
+      };
+
+      worker.reset = function resetWorker() {
+        worker.postMessage({
+          reset: true
+        });
+
+        for (var id in resolves) {
+          resolves[id]();
+          delete resolves[id];
+        }
+      };
+    }
+
+    return function () {
+      if (worker) {
+        return worker;
+      }
+
+      if (!isWorker && canUseWorker) {
+        var code = ['var CONFETTI, SIZE = {}, module = {};', '(' + main.toString() + ')(this, module, true, SIZE);', 'onmessage = function(msg) {', '  if (msg.data.options) {', '    CONFETTI(msg.data.options).then(function () {', '      if (msg.data.callback) {', '        postMessage({ callback: msg.data.callback });', '      }', '    });', '  } else if (msg.data.reset) {', '    CONFETTI.reset();', '  } else if (msg.data.resize) {', '    SIZE.width = msg.data.resize.width;', '    SIZE.height = msg.data.resize.height;', '  } else if (msg.data.canvas) {', '    SIZE.width = msg.data.canvas.width;', '    SIZE.height = msg.data.canvas.height;', '    CONFETTI = module.exports.create(msg.data.canvas);', '  }', '}'].join('\n');
+
+        try {
+          worker = new Worker(URL.createObjectURL(new Blob([code])));
+        } catch (e) {
+          // eslint-disable-next-line no-console
+          typeof console !== undefined && typeof console.warn === 'function' ? console.warn('🎊 Could not load worker', e) : null;
+          return null;
+        }
+
+        decorate(worker);
+      }
+
+      return worker;
+    };
+  }();
+
+  var defaults = {
+    particleCount: 50,
+    angle: 90,
+    spread: 45,
+    startVelocity: 45,
+    decay: 0.9,
+    gravity: 1,
+    drift: 0,
+    ticks: 200,
+    x: 0.5,
+    y: 0.5,
+    shapes: ['square', 'circle'],
+    zIndex: 100,
+    colors: ['#26ccff', '#a25afd', '#ff5e7e', '#88ff5a', '#fcff42', '#ffa62d', '#ff36ff'],
+    // probably should be true, but back-compat
+    disableForReducedMotion: false,
+    scalar: 1
+  };
+
+  function convert(val, transform) {
+    return transform ? transform(val) : val;
+  }
+
+  function isOk(val) {
+    return !(val === null || val === undefined);
+  }
+
+  function prop(options, name, transform) {
+    return convert(options && isOk(options[name]) ? options[name] : defaults[name], transform);
+  }
+
+  function onlyPositiveInt(number) {
+    return number < 0 ? 0 : Math.floor(number);
+  }
+
+  function randomInt(min, max) {
+    // [min, max)
+    return Math.floor(Math.random() * (max - min)) + min;
+  }
+
+  function toDecimal(str) {
+    return parseInt(str, 16);
+  }
+
+  function colorsToRgb(colors) {
+    return colors.map(hexToRgb);
+  }
+
+  function hexToRgb(str) {
+    var val = String(str).replace(/[^0-9a-f]/gi, '');
+
+    if (val.length < 6) {
+      val = val[0] + val[0] + val[1] + val[1] + val[2] + val[2];
+    }
+
+    return {
+      r: toDecimal(val.substring(0, 2)),
+      g: toDecimal(val.substring(2, 4)),
+      b: toDecimal(val.substring(4, 6))
+    };
+  }
+
+  function getOrigin(options) {
+    var origin = prop(options, 'origin', Object);
+    origin.x = prop(origin, 'x', Number);
+    origin.y = prop(origin, 'y', Number);
+    return origin;
+  }
+
+  function setCanvasWindowSize(canvas) {
+    canvas.width = document.documentElement.clientWidth;
+    canvas.height = document.documentElement.clientHeight;
+  }
+
+  function setCanvasRectSize(canvas) {
+    var rect = canvas.getBoundingClientRect();
+    canvas.width = rect.width;
+    canvas.height = rect.height;
+  }
+
+  function getCanvas(zIndex) {
+    var canvas = document.createElement('canvas');
+    canvas.style.position = 'fixed';
+    canvas.style.top = '0px';
+    canvas.style.left = '0px';
+    canvas.style.pointerEvents = 'none';
+    canvas.style.zIndex = zIndex;
+    return canvas;
+  }
+
+  function ellipse(context, x, y, radiusX, radiusY, rotation, startAngle, endAngle, antiClockwise) {
+    context.save();
+    context.translate(x, y);
+    context.rotate(rotation);
+    context.scale(radiusX, radiusY);
+    context.arc(0, 0, 1, startAngle, endAngle, antiClockwise);
+    context.restore();
+  }
+
+  function randomPhysics(opts) {
+    var radAngle = opts.angle * (Math.PI / 180);
+    var radSpread = opts.spread * (Math.PI / 180);
+    return {
+      x: opts.x,
+      y: opts.y,
+      wobble: Math.random() * 10,
+      velocity: opts.startVelocity * 0.5 + Math.random() * opts.startVelocity,
+      angle2D: -radAngle + (0.5 * radSpread - Math.random() * radSpread),
+      tiltAngle: Math.random() * Math.PI,
+      color: opts.color,
+      shape: opts.shape,
+      tick: 0,
+      totalTicks: opts.ticks,
+      decay: opts.decay,
+      drift: opts.drift,
+      random: Math.random() + 5,
+      tiltSin: 0,
+      tiltCos: 0,
+      wobbleX: 0,
+      wobbleY: 0,
+      gravity: opts.gravity * 3,
+      ovalScalar: 0.6,
+      scalar: opts.scalar
+    };
+  }
+
+  function updateFetti(context, fetti) {
+    fetti.x += Math.cos(fetti.angle2D) * fetti.velocity + fetti.drift;
+    fetti.y += Math.sin(fetti.angle2D) * fetti.velocity + fetti.gravity;
+    fetti.wobble += 0.1;
+    fetti.velocity *= fetti.decay;
+    fetti.tiltAngle += 0.1;
+    fetti.tiltSin = Math.sin(fetti.tiltAngle);
+    fetti.tiltCos = Math.cos(fetti.tiltAngle);
+    fetti.random = Math.random() + 5;
+    fetti.wobbleX = fetti.x + 10 * fetti.scalar * Math.cos(fetti.wobble);
+    fetti.wobbleY = fetti.y + 10 * fetti.scalar * Math.sin(fetti.wobble);
+    var progress = fetti.tick++ / fetti.totalTicks;
+    var x1 = fetti.x + fetti.random * fetti.tiltCos;
+    var y1 = fetti.y + fetti.random * fetti.tiltSin;
+    var x2 = fetti.wobbleX + fetti.random * fetti.tiltCos;
+    var y2 = fetti.wobbleY + fetti.random * fetti.tiltSin;
+    context.fillStyle = 'rgba(' + fetti.color.r + ', ' + fetti.color.g + ', ' + fetti.color.b + ', ' + (1 - progress) + ')';
+    context.beginPath();
+
+    if (fetti.shape === 'circle') {
+      context.ellipse ? context.ellipse(fetti.x, fetti.y, Math.abs(x2 - x1) * fetti.ovalScalar, Math.abs(y2 - y1) * fetti.ovalScalar, Math.PI / 10 * fetti.wobble, 0, 2 * Math.PI) : ellipse(context, fetti.x, fetti.y, Math.abs(x2 - x1) * fetti.ovalScalar, Math.abs(y2 - y1) * fetti.ovalScalar, Math.PI / 10 * fetti.wobble, 0, 2 * Math.PI);
+    } else {
+      context.moveTo(Math.floor(fetti.x), Math.floor(fetti.y));
+      context.lineTo(Math.floor(fetti.wobbleX), Math.floor(y1));
+      context.lineTo(Math.floor(x2), Math.floor(y2));
+      context.lineTo(Math.floor(x1), Math.floor(fetti.wobbleY));
+    }
+
+    context.closePath();
+    context.fill();
+    return fetti.tick < fetti.totalTicks;
+  }
+
+  function animate(canvas, fettis, resizer, size, done) {
+    var animatingFettis = fettis.slice();
+    var context = canvas.getContext('2d');
+    var animationFrame;
+    var destroy;
+    var prom = promise(function (resolve) {
+      function onDone() {
+        animationFrame = destroy = null;
+        context.clearRect(0, 0, size.width, size.height);
+        done();
+        resolve();
+      }
+
+      function update() {
+        if (isWorker && !(size.width === workerSize.width && size.height === workerSize.height)) {
+          size.width = canvas.width = workerSize.width;
+          size.height = canvas.height = workerSize.height;
+        }
+
+        if (!size.width && !size.height) {
+          resizer(canvas);
+          size.width = canvas.width;
+          size.height = canvas.height;
+        }
+
+        context.clearRect(0, 0, size.width, size.height);
+        animatingFettis = animatingFettis.filter(function (fetti) {
+          return updateFetti(context, fetti);
+        });
+
+        if (animatingFettis.length) {
+          animationFrame = raf.frame(update);
+        } else {
+          onDone();
+        }
+      }
+
+      animationFrame = raf.frame(update);
+      destroy = onDone;
+    });
+    return {
+      addFettis: function (fettis) {
+        animatingFettis = animatingFettis.concat(fettis);
+        return prom;
+      },
+      canvas: canvas,
+      promise: prom,
+      reset: function () {
+        if (animationFrame) {
+          raf.cancel(animationFrame);
+        }
+
+        if (destroy) {
+          destroy();
+        }
+      }
+    };
+  }
+
+  function confettiCannon(canvas, globalOpts) {
+    var isLibCanvas = !canvas;
+    var allowResize = !!prop(globalOpts || {}, 'resize');
+    var globalDisableForReducedMotion = prop(globalOpts, 'disableForReducedMotion', Boolean);
+    var shouldUseWorker = canUseWorker && !!prop(globalOpts || {}, 'useWorker');
+    var worker = shouldUseWorker ? getWorker() : null;
+    var resizer = isLibCanvas ? setCanvasWindowSize : setCanvasRectSize;
+    var initialized = canvas && worker ? !!canvas.__confetti_initialized : false;
+    var preferLessMotion = typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion)').matches;
+    var animationObj;
+
+    function fireLocal(options, size, done) {
+      var particleCount = prop(options, 'particleCount', onlyPositiveInt);
+      var angle = prop(options, 'angle', Number);
+      var spread = prop(options, 'spread', Number);
+      var startVelocity = prop(options, 'startVelocity', Number);
+      var decay = prop(options, 'decay', Number);
+      var gravity = prop(options, 'gravity', Number);
+      var drift = prop(options, 'drift', Number);
+      var colors = prop(options, 'colors', colorsToRgb);
+      var ticks = prop(options, 'ticks', Number);
+      var shapes = prop(options, 'shapes');
+      var scalar = prop(options, 'scalar');
+      var origin = getOrigin(options);
+      var temp = particleCount;
+      var fettis = [];
+      var startX = canvas.width * origin.x;
+      var startY = canvas.height * origin.y;
+
+      while (temp--) {
+        fettis.push(randomPhysics({
+          x: startX,
+          y: startY,
+          angle: angle,
+          spread: spread,
+          startVelocity: startVelocity,
+          color: colors[temp % colors.length],
+          shape: shapes[randomInt(0, shapes.length)],
+          ticks: ticks,
+          decay: decay,
+          gravity: gravity,
+          drift: drift,
+          scalar: scalar
+        }));
+      } // if we have a previous canvas already animating,
+      // add to it
+
+
+      if (animationObj) {
+        return animationObj.addFettis(fettis);
+      }
+
+      animationObj = animate(canvas, fettis, resizer, size, done);
+      return animationObj.promise;
+    }
+
+    function fire(options) {
+      var disableForReducedMotion = globalDisableForReducedMotion || prop(options, 'disableForReducedMotion', Boolean);
+      var zIndex = prop(options, 'zIndex', Number);
+
+      if (disableForReducedMotion && preferLessMotion) {
+        return promise(function (resolve) {
+          resolve();
+        });
+      }
+
+      if (isLibCanvas && animationObj) {
+        // use existing canvas from in-progress animation
+        canvas = animationObj.canvas;
+      } else if (isLibCanvas && !canvas) {
+        // create and initialize a new canvas
+        canvas = getCanvas(zIndex);
+        document.body.appendChild(canvas);
+      }
+
+      if (allowResize && !initialized) {
+        // initialize the size of a user-supplied canvas
+        resizer(canvas);
+      }
+
+      var size = {
+        width: canvas.width,
+        height: canvas.height
+      };
+
+      if (worker && !initialized) {
+        worker.init(canvas);
+      }
+
+      initialized = true;
+
+      if (worker) {
+        canvas.__confetti_initialized = true;
+      }
+
+      function onResize() {
+        if (worker) {
+          // TODO this really shouldn't be immediate, because it is expensive
+          var obj = {
+            getBoundingClientRect: function () {
+              if (!isLibCanvas) {
+                return canvas.getBoundingClientRect();
+              }
+            }
+          };
+          resizer(obj);
+          worker.postMessage({
+            resize: {
+              width: obj.width,
+              height: obj.height
+            }
+          });
+          return;
+        } // don't actually query the size here, since this
+        // can execute frequently and rapidly
+
+
+        size.width = size.height = null;
+      }
+
+      function done() {
+        animationObj = null;
+
+        if (allowResize) {
+          global.removeEventListener('resize', onResize);
+        }
+
+        if (isLibCanvas && canvas) {
+          document.body.removeChild(canvas);
+          canvas = null;
+          initialized = false;
+        }
+      }
+
+      if (allowResize) {
+        global.addEventListener('resize', onResize, false);
+      }
+
+      if (worker) {
+        return worker.fire(options, size, done);
+      }
+
+      return fireLocal(options, size, done);
+    }
+
+    fire.reset = function () {
+      if (worker) {
+        worker.reset();
+      }
+
+      if (animationObj) {
+        animationObj.reset();
+      }
+    };
+
+    return fire;
+  }
+
+  module.exports = confettiCannon(null, {
+    useWorker: true,
+    resize: true
+  });
+  module.exports.create = confettiCannon;
+})(function () {
+  if (typeof window !== 'undefined') {
+    return window;
+  }
+
+  if (typeof self !== 'undefined') {
+    return self;
+  }
+
+  return this || {};
+}(), _module, false); // end source content
+
+
+var _default = _module.exports;
+exports.default = _default;
+var create = _module.exports.create;
+exports.create = create;
+},{}],"App.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -50529,61 +51106,76 @@ var _util = require("react-crossword-near/dist/es/util");
 
 var _jsSha = _interopRequireDefault(require("js-sha256"));
 
+var _canvasConfetti = _interopRequireDefault(require("canvas-confetti"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
-const App = ({
-  data,
-  solutionHash
-}) => {
+const App = _ref => {
+  let {
+    data,
+    solutionHash
+  } = _ref;
   const crossword = (0, _react.useRef)();
-  const [solutionFound, setSolutionFound] = (0, _react.useState)("Not correct yet");
+  const [solutionFound, setSolutionFound] = (0, _react.useState)(false);
+  (0, _react.useEffect)(() => {
+    if (solutionFound) {
+      (0, _canvasConfetti.default)({
+        particleCount: 700,
+        angle: 60,
+        spread: 200,
+        origin: {
+          x: 0
+        }
+      });
+      (0, _canvasConfetti.default)({
+        particleCount: 700,
+        angle: 120,
+        spread: 200,
+        origin: {
+          x: 1
+        }
+      });
+    }
+  }, [solutionFound]);
   const onCrosswordComplete = (0, _react.useCallback)(async completeCount => {
     if (completeCount !== false) {
       let gridData = (0, _util.createGridData)(data).gridData;
       (0, _util.loadGuesses)(gridData, 'guesses');
       await checkSolution(gridData);
     }
-  }, []); // This function is called when all entries are filled
+  }, []);
 
   async function checkSolution(gridData) {
     let seedPhrase = (0, _utils.parseSolutionSeedPhrase)(data, gridData);
 
-    let answerHash = _jsSha.default.sha256(seedPhrase); // Compare crossword solution's public key with the known public key for this puzzle
-    // (It was given to us when we first fetched the puzzle in index.js)
-
+    let answerHash = _jsSha.default.sha256(seedPhrase);
 
     if (answerHash === solutionHash) {
-      console.log("You're correct!");
-      setSolutionFound("Correct!");
+      setSolutionFound(true);
     } else {
-      console.log("That's not the correct solution. :/");
-      setSolutionFound("Not correct yet");
+      setSolutionFound(false);
     }
   }
 
   return /*#__PURE__*/_react.default.createElement("div", {
     id: "page"
-  }, /*#__PURE__*/_react.default.createElement("h1", null, "NEAR Crossword Puzzle"), /*#__PURE__*/_react.default.createElement("div", {
+  }, /*#__PURE__*/_react.default.createElement("h1", null, "Coin Crossword"), /*#__PURE__*/_react.default.createElement("div", {
     id: "crossword-wrapper"
-  }, /*#__PURE__*/_react.default.createElement("h3", null, "Status: ", solutionFound), /*#__PURE__*/_react.default.createElement(_reactCrosswordNear.default, {
+  }, /*#__PURE__*/_react.default.createElement(_reactCrosswordNear.default, {
     data: data,
     ref: crossword,
     onCrosswordComplete: onCrosswordComplete
-  }), /*#__PURE__*/_react.default.createElement("p", null, "Thank you ", /*#__PURE__*/_react.default.createElement("a", {
-    href: "https://github.com/JaredReisinger/react-crossword",
-    target: "_blank",
-    rel: "noreferrer"
-  }, "@jaredreisinger/react-crossword"), "!")));
+  })));
 };
 
 var _default = App;
 exports.default = _default;
-},{"./App.css":"App.css","react":"../node_modules/react/index.js","react-crossword-near":"../node_modules/react-crossword-near/dist/es/index.js","./utils":"utils.js","react-crossword-near/dist/es/util":"../node_modules/react-crossword-near/dist/es/util.js","js-sha256":"../node_modules/js-sha256/src/sha256.js"}],"config.js":[function(require,module,exports) {
-const CONTRACT_NAME = "snippets.demo.testnet" || 'your-crossword-account.testnet';
+},{"./App.css":"App.css","react":"../node_modules/react/index.js","react-crossword-near":"../node_modules/react-crossword-near/dist/es/index.js","./utils":"utils.js","react-crossword-near/dist/es/util":"../node_modules/react-crossword-near/dist/es/util.js","js-sha256":"../node_modules/js-sha256/src/sha256.js","canvas-confetti":"../node_modules/canvas-confetti/dist/confetti.module.mjs"}],"config.js":[function(require,module,exports) {
+const CONTRACT_NAME = "crossword.emalopez.testnet";
 
 function getConfig(env) {
   switch (env) {
@@ -50620,7 +51212,7 @@ function getConfig(env) {
       return {
         networkId: 'local',
         nodeUrl: 'http://localhost:3030',
-        keyPath: `${"/Users/mike"}/.near/validator_key.json`,
+        keyPath: `${"/Users/emalopez"}/.near/validator_key.json`,
         walletUrl: 'http://localhost:4000/wallet',
         contractName: CONTRACT_NAME
       };
@@ -50657,14 +51249,20 @@ Object.defineProperty(exports, "__esModule", {
 exports.data = void 0;
 const data = {
   across: {
-    1: {
-      clue: 'Native token',
-      answer: '????',
-      row: 1,
-      col: 2
+    2: {
+      clue: 'Ultrasound money',
+      answer: '????????',
+      row: 3,
+      col: 1
     },
-    3: {
-      clue: 'DeFi decentralizes this',
+    5: {
+      clue: 'Coin of the the fastest network',
+      answer: '??????',
+      row: 5,
+      col: 5
+    },
+    6: {
+      clue: 'The creator may not exist',
       answer: '???????',
       row: 7,
       col: 0
@@ -50672,16 +51270,34 @@ const data = {
   },
   down: {
     1: {
-      clue: 'Name of the spec/standards site is _______.io',
-      answer: '???????',
-      row: 1,
-      col: 2
+      clue: 'Stablecoin of which the treasure is unknown',
+      answer: '??????',
+      row: 0,
+      col: 3
     },
-    2: {
-      clue: 'DeFi site on NEAR is ___.finance',
-      answer: '???',
+    3: {
+      clue: 'Symbol of the another dog coin',
+      answer: '????',
+      row: 5,
+      col: 1
+    },
+    4: {
+      clue: 'Elon loves her and hates her',
+      answer: '????????',
+      row: 0,
+      col: 6
+    },
+    7: {
+      clue: 'Coin symbol of the eco-friendly network',
+      answer: '????',
+      row: 5,
+      col: 8
+    },
+    8: {
+      clue: 'Coin of the multi-chain network',
+      answer: '????????',
       row: 1,
-      col: 5
+      col: 10
     }
   }
 };
@@ -50704,7 +51320,7 @@ var _hardcodedData = require("./hardcoded-data");
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 async function initCrossword() {
-  const nearConfig = (0, _config.default)(undefined || 'testnet');
+  const nearConfig = (0, _config.default)("testnet" || 'testnet');
   const solutionHash = await (0, _utils.viewMethodOnContract)(nearConfig, 'get_solution');
   return {
     data: _hardcodedData.data,
@@ -50712,10 +51328,12 @@ async function initCrossword() {
   };
 }
 
-initCrossword().then(({
-  data,
-  solutionHash
-}) => {
+initCrossword().then(_ref => {
+  let {
+    data,
+    solutionHash
+  } = _ref;
+
   _reactDom.default.render( /*#__PURE__*/_react.default.createElement(_App.default, {
     data: data,
     solutionHash: solutionHash
@@ -50749,7 +51367,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "57374" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50714" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
