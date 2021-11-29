@@ -1,4 +1,4 @@
-const CONTRACT_NAME = 'crossword.emalopez.testnet:12EnnwKx4tTJMJaLjaVRKVbfvyhp3Brc37bnPWzwog7G';
+const CONTRACT_NAME = 'crossword.emalopez.testnet';
 
 function getConfig(env) {
   switch(env) {
