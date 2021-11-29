@@ -39,14 +39,14 @@ const App = ({ data, solutionHash }) => {
           setSolutionFound(false);
         }
       }
-      
+
       if (completeCount !== false) {
         let gridData = createGridData(data).gridData;
         loadGuesses(gridData, 'guesses');
         await checkSolution(gridData);
       }
     },
-    [data]
+    [data, solutionHash]
   );
 
   return (

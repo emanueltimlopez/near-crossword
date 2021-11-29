@@ -1,4 +1,4 @@
-const CONTRACT_NAME = process.env.CONTRACT_NAME;
+const CONTRACT_NAME = 'crossword.emalopez.testnet:12EnnwKx4tTJMJaLjaVRKVbfvyhp3Brc37bnPWzwog7G';
 
 function getConfig(env) {
   switch(env) {
