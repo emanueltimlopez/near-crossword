@@ -35,7 +35,7 @@ const App = ({ data, solutionHash }) => {
         await checkSolution(gridData);
       }
     },
-    []
+    [checkSolution, data]
   );
 
   async function checkSolution(gridData) {
