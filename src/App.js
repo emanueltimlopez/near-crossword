@@ -29,24 +29,25 @@ const App = ({ data, solutionHash }) => {
 
   const onCrosswordComplete = useCallback(
     async (completeCount) => {
+
+      const checkSolution = async (gridData) => {
+        let seedPhrase = parseSolutionSeedPhrase(data, gridData);
+        let answerHash = sha256.sha256(seedPhrase);
+        if (answerHash === solutionHash) {
+          setSolutionFound(true);
+        } else {
+          setSolutionFound(false);
+        }
+      }
+      
       if (completeCount !== false) {
         let gridData = createGridData(data).gridData;
         loadGuesses(gridData, 'guesses');
         await checkSolution(gridData);
       }
     },
-    [checkSolution, data]
+    [data]
   );
-
-  async function checkSolution(gridData) {
-    let seedPhrase = parseSolutionSeedPhrase(data, gridData);
-    let answerHash = sha256.sha256(seedPhrase);
-    if (answerHash === solutionHash) {
-      setSolutionFound(true);
-    } else {
-      setSolutionFound(false);
-    }
-  }
 
   return (
     <div id="page">
